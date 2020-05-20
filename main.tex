@@ -4,6 +4,8 @@
 \usepackage[document]{ragged2e}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{listings}
 
 \title{ЗАДАЧИ ПО КРИПТОГРАФИЯ}
 \author{Йоана Левчева\\ Приложна математика, 4 курс, ф.н. 31492}
@@ -270,7 +272,7 @@ $\bullet$ $a \neq 0, 1, -1$. Тогава $c$ = $(1 - a^2)b^{-1}$. Това ни
                              c & d
                          \end{pmatrix}$
                          $\in$ $\mathbf{Z_{2}}$. 
-Отново получаваме същата система като при $\mathbf{Z_{13}}$
+Отново получаваме същата система като при $\mathbf{Z_{13}}$.
 
 \justify
 Ако $a + d \neq 0$ следва, че $b = 0$ и $c = 0$ и също, че или $a = 1$ или $d = 1$. Но от $b = 0$ и $c = 0$ следва, че и $a^2 = 1$ и $d^2 = 1$, т.е. $a = 1$ и $d = 1$, което е невъзможно. Следователно от тук получаваме 0 решения. \\
@@ -278,7 +280,7 @@ $\bullet$ $a \neq 0, 1, -1$. Тогава $c$ = $(1 - a^2)b^{-1}$. Това ни
 
 $\bullet$ $a = 0$. Тогава следва, че $d = 0$ и $bc = 1$, което означава, че $b$ и $c$ са обратими и следователно имаме една взъможност $b = 1$ и $c = 1$. Този случай ни дава 1 решение.
 
-$\bullet$ $a = 1$. Тогава и $d = 1$ и още $bc = 0$, т.е. или $b = 0$ или $c = 0$ или $b = c = 0$. От тук имаме още 3 решения.
+$\bullet$ $a = 1$. Тогава и $d = 1$ и още $bc = 0$, т.е. или $b = 0$, $c = 1$ или $c = 0$, $b = 1$ или $b = c = 0$. От тук имаме още 3 решения.
 
 \justify
 Сумирайки всички решения, получаваме, че в $\mathbf{Z_{2}}$ има $1 + 3 = 4$ решения.
@@ -289,7 +291,7 @@ $\bullet$ $a = 1$. Тогава и $d = 1$ и още $bc = 0$, т.е. или $b 
 \section*{Задача 3}
 
 \justify
-Ще започнем с това да запишем кое число съответства на всяка буква от открития текст и съответстващия му криптотекст, използвайки дадената схема за кодиране:
+Ще започнем с това да преобразуваме открития текст и съответстващия му криптотекст във вектори над $\mathbf{Z_{26}}$, използвайки дадената схема за кодиране:
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
@@ -311,5 +313,321 @@ $\bullet$ $a = 1$. Тогава и $d = 1$ и още $bc = 0$, т.е. или $b 
         \end{tabular}
 \end{center}
 
-\end{document}
+\justify
+Дължината на шифрираното съобщение е 12. Тъй като $m$ не е известно и сме предположили, че дели дължината на шифрираното съобщение, то ще започнем от случая $m = 2$. 
 
+\justify
+Тъй като $m = 2$, то ще разбием открития текст и криптотекста на 6 блока с дължина 2. Имаме следните двойки: $E_K(2,17) = (21,6)$, $E_K(24,15) = (24,23)$, $E_K(19,14) = (0,17)$, $E_K(6,17) = (3,8)$, $E_K(0,15) = (6,11)$, $E_K(7,24) = (12,11)$. От първата и третата двойка получаваме следното матрично уравнение: \\
+
+\begin{center}
+$\begin{pmatrix}
+    21 & 6 \\
+    0 & 17
+\end{pmatrix}$ = $\begin{pmatrix}
+                             2 & 17 \\
+                             19 & 14
+                         \end{pmatrix}$ $K$
+\end{center}
+
+\justify
+Пресмятаме $\begin{pmatrix}
+                2 & 17 \\
+                19 & 14
+            \end{pmatrix}^{-1}$ = $\begin{pmatrix}
+                10 & 25 \\
+                5 & 20
+            \end{pmatrix}$. Тогава за ключа получаваме: \\
+            
+\begin{center}
+    $K$ = $\begin{pmatrix}
+                10 & 25 \\
+                5 & 20
+            \end{pmatrix}$ $\begin{pmatrix}
+                21 & 6 \\
+                0 & 17
+            \end{pmatrix}$ = $\begin{pmatrix}
+                16 & 15 \\
+                9 & 14
+            \end{pmatrix}$
+\end{center}
+
+\justify
+Сега да приложим ключа (също така $K^{-1}$ съществува) към втората двойка от открития текст:
+
+\begin{center}
+    $(24,15)$ $\begin{pmatrix}
+                16 & 15 \\
+                9 & 14
+            \end{pmatrix}$ = $(25,24)$,
+\end{center}
+
+\justify
+което очевидно не е вярно, защото трябваше да получим $(24,23)$. Следователно, ако $m = 2$, не можем да намерим ключа. 
+
+\justify
+Нека сега $m = 3$. Трябва да разбием открития текст и криптотекста на 4 блока с дължина 3. Имаме следните тройки: $E_K(2,17,24) = (21,6,24)$, $E_K(15,19,14) = (23,0,17)$, $E_K(6,17,0) = (3,8,6)$, $E_K(15,7,24) = (11,12,11)$. Трябва да решим следната система: 
+
+\begin{center}
+    $\begin{pmatrix}
+        2 & 17 & 24 \\
+        15 & 19 & 14 \\
+        6 & 17 & 0 \\
+        15 & 7 & 24
+    \end{pmatrix}$ $K$ = $\begin{pmatrix}
+                            21 & 6 & 24 \\
+                            23 & 0 & 17 \\
+                            3 & 8 & 6 \\
+                            11 & 12 & 11
+                         \end{pmatrix}$
+\end{center}
+
+\justify
+След известен брой аритметични операции стигаме до решението:
+
+\begin{center}
+    $K$ = $\begin{pmatrix}
+        2 & 0 & 1 \\
+        1 & 2 & 0 \\
+        0 & 1 & 2
+    \end{pmatrix}$
+\end{center}
+
+\justify
+Матрицата $K$ също така е и обратима: 
+
+\begin{center}
+    $K^{-1}$ = $\begin{pmatrix}
+        12 & 3 & 20 \\
+        20 & 12 & 3 \\
+        3 & 20 & 12
+    \end{pmatrix}$
+\end{center}
+
+\justify
+Следователно матрицата $K$ удовлетворява условието да е ключ. 
+
+\section*{Задача 4}
+
+\justify
+Откритият текст ще има дължина равна на дължината на криптотекста, тоест 31, и в себе си съдържа думата GESTURE. Имаме например:
+
+\begin{center}
+\begin{tabular}{c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c}
+        * * * * * * * * * * * * * * G E S T U R E * * * * * * * * * * \\
+        \end{tabular}
+\end{center}
+
+\justify
+Ключът се състои от ключовата дума, поставена в началото, и открития текст поставен веднага след нея. Тъй като по условие ключовата дума е с дължина 6, то ще има изместване на GESTURE с 6 позиции надясно:
+
+\begin{center}
+\begin{tabular}{c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c c}
+        $k0$ $k1$ $k2$ $k3$ $k4$ $k5$ * * * * * * * * * * * * * * G E S T U R E * * * * \\
+        \end{tabular}
+\end{center}
+
+\justify
+Забелязваме, че тъй като GESTURE има дължина 7, а отместването е с дължина 6, то G в ключа ще стои под E в открития текст. Също така при шифриране това означава, че имаме $E + G = K$, което показва, че GESTURE в ключа, може да се постави, така че да e над $K$ в криптотекста. В криптотрекста имаме $K$ на точно 5 места, тоест има 5 възможности. След проверяване на случаите, само един излиза, че може да е смислен и нека дешифрираме каквото можем, използвайки тази информация:
+
+\justify
+Криптотекст:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    G&X&I&L&B&G&L&Q&Q&J&A&I&P&W&B&M&R&K&A&Z&B&W&Y&K&K&K&U&C&R&K&G \\
+    \hline
+    6&23&8&11&1&6&11&16&16&9&0&8&15&22&1&12&17&10&0&25&1&22&24&10&10&10&20&2&17&10&6 \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Ключ:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&G&E&S&T&U&R&E&-&-&-&-&-&-&- \\
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&6&4&18&19&20&17&4&-&-&-&-&-&-&- \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Открит текст:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&4&22&7&8&2&7&6&-&-&-&-&-&-&- \\
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&E&W&H&I&C&H&G&-&-&-&-&-&-&- \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Разполагайки с тази информация, вече знаем, че в ключа вдясно от GESTURE се намира WHICHG, а в открития текст отляво на EWHICH имаме GESTUR. И нека отново разкирем колкото можем информация за ключа и открития текст.
+
+\justify
+Криптотекст:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    G&X&I&L&B&G&L&Q&Q&J&A&I&P&W&B&M&R&K&A&Z&B&W&Y&K&K&K&U&C&R&K&G \\
+    \hline
+    6&23&8&11&1&6&11&16&16&9&0&8&15&22&1&12&17&10&0&25&1&22&24&10&10&10&20&2&17&10&6 \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Ключ:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&G&E&S&T&U&R&E&\textcolor{red}{W}&\textcolor{red}{H}&\textcolor{red}{I}&\textcolor{red}{C}&\textcolor{red}{H}&\textcolor{red}{G}&- \\
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&-&6&4&18&19&20&17&4&\textcolor{red}{22}&\textcolor{red}{7}&\textcolor{red}{8}&\textcolor{red}{2}&\textcolor{red}{7}&\textcolor{red}{6}&- \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Открит текст:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&\textcolor{red}{6}&\textcolor{red}{4}&\textcolor{red}{18}&\textcolor{red}{19}&\textcolor{red}{20}&\textcolor{red}{17}&4&22&7&8&2&7&6&-&-&-&-&-&-&- \\
+    \hline
+    -&-&-&-&-&-&-&-&-&-&-&\textcolor{red}{G}&\textcolor{red}{E}&\textcolor{red}{S}&\textcolor{red}{T}&\textcolor{red}{U}&\textcolor{red}{R}&E&W&H&I&C&H&G&-&-&-&-&-&-&- \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+По аналогичен начин успяваме да открием открития текст:
+
+\justify
+Криптотекст:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    G&X&I&L&B&G&L&Q&Q&J&A&I&P&W&B&M&R&K&A&Z&B&W&Y&K&K&K&U&C&R&K&G \\
+    \hline
+    6&23&8&11&1&6&11&16&16&9&0&8&15&22&1&12&17&10&0&25&1&22&24&10&10&10&20&2&17&10&6 \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Ключ:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textcolor{orange}{G}&\textcolor{orange}{L}&\textcolor{orange}{A}&\textcolor{orange}{U}&\textcolor{orange}{B}&\textcolor{olive}{E}&\textcolor{olive}{A}&\textcolor{olive}{M}&\textcolor{olive}{I}&\textcolor{olive}{R}&\textcolor{olive}{A}&\textcolor{blue}{C}&\textcolor{blue}{L}&\textcolor{blue}{E}&\textcolor{blue}{I}&\textcolor{blue}{S}&\textcolor{blue}{A}&G&E&S&T&U&R&E&\textcolor{red}{W}&\textcolor{red}{H}&\textcolor{red}{I}&\textcolor{red}{C}&\textcolor{red}{H}&\textcolor{red}{G}&\textcolor{blue}{O} \\
+    \hline
+    \textcolor{orange}{6}&\textcolor{orange}{11}&\textcolor{orange}{0}&\textcolor{orange}{20}&\textcolor{orange}{1}&\textcolor{olive}{4}&\textcolor{olive}{0}&\textcolor{olive}{12}&\textcolor{olive}{8}&\textcolor{olive}{17}&\textcolor{olive}{0}&\textcolor{blue}{2}&\textcolor{blue}{11}&\textcolor{blue}{4}&\textcolor{blue}{8}&\textcolor{blue}{18}&\textcolor{blue}{0}&6&4&18&19&20&17&4&\textcolor{red}{22}&\textcolor{red}{7}&\textcolor{red}{8}&\textcolor{red}{2}&\textcolor{red}{7}&\textcolor{red}{6}&\textcolor{blue}{14} \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Открит текст:
+\begin{center}
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textcolor{olive}{0}&\textcolor{olive}{12}&\textcolor{olive}{8}&\textcolor{olive}{17}&\textcolor{olive}{0}&\textcolor{blue}{2}&\textcolor{blue}{11}&\textcolor{blue}{4}&\textcolor{blue}{8}&\textcolor{blue}{18}&\textcolor{blue}{0}&\textcolor{red}{6}&\textcolor{red}{4}&\textcolor{red}{18}&\textcolor{red}{19}&\textcolor{red}{20}&\textcolor{red}{17}&4&22&7&8&2&7&6&\textcolor{blue}{14}&\textcolor{blue}{3}&\textcolor{blue}{12}&\textcolor{blue}{0}&\textcolor{blue}{10}&\textcolor{blue}{4}&\textcolor{olive}{18} \\
+    \hline
+    \textcolor{olive}{A}&\textcolor{olive}{M}&\textcolor{olive}{I}&\textcolor{olive}{R}&\textcolor{olive}{A}&\textcolor{blue}{C}&\textcolor{blue}{L}&\textcolor{blue}{E}&\textcolor{blue}{I}&\textcolor{blue}{S}&\textcolor{blue}{A}&\textcolor{red}{G}&\textcolor{red}{E}&\textcolor{red}{S}&\textcolor{red}{T}&\textcolor{red}{U}&\textcolor{red}{R}&E&W&H&I&C&H&G&\textcolor{blue}{O}&\textcolor{blue}{D}&\textcolor{blue}{M}&\textcolor{blue}{A}&\textcolor{blue}{K}&\textcolor{blue}{E}&\textcolor{olive}{S} \\
+    \hline
+\end{tabular}}
+\end{center}
+
+\justify
+Получихме, че ключовата дума е \\
+\begin{center}
+    GLAUBE \\
+\end{center}
+и откритият текст е \\
+\begin{center}
+    A MIRACLE IS A GESTURE WHICH GOD MAKES.
+\end{center}
+
+\section*{Задача 5}
+
+\justify
+Имеме криптотекста разделен на групи:
+\begin{center}
+ACAUI MMGRC AILEE HKREG EAISW OSTHDS
+\end{center}
+\justify
+На първия ред за първата клетка имаме две възможности - да съдържа $A$ или да е забранена, което ще отбелязваме със $*$. За останалите клетки възможностите са да са забранени полета или да съдържат първата или втората буква от своят група. 
+
+\justify
+Код на Swift за всички възможни комбинации от букви за  първия ред от таблицата:
+
+\begin{verbatim}
+let firstBox: [Character] = ["*", "a"]
+let secondBox: [Character] = ["*", "m"]
+let thirdBox: [Character] = ["*", "a", "i"]
+let fourthBox: [Character] = ["*", "h", "k"]
+let fifthBox: [Character] = ["*", "e", "a"]
+let sixthBox: [Character] = ["*", "o", "s"]
+
+var myCount: Int
+
+for first in firstBox {
+    for second in secondBox {
+        for third in thirdBox {
+            for fourth in fourthBox {
+                for fifth in fifthBox {
+                    for sixth in sixthBox {
+                        myCount = 0
+                        for box in "\(first)\(second)\(third)\(fourth)\(fifth)\(sixth)" {
+                            if box == "*" {
+                                myCount += 1
+                            }
+                        }
+                        if myCount == 0 || myCount == 1 {
+                                print("\(first)\(second)\(third)\(fourth)\(fifth)\(sixth)")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+\end{verbatim}
+
+\newpage
+\justify
+Нито една от 80-те различни комбинации не върши работа, ако сме приели, че има най-много по едно забранено поле в колона и ред. Но, взимайки предвид отговора на предишната задача,
+
+\begin{center}
+    A MIRACLE IS A GESTURE WHICH GOD MAKES
+\end{center}
+
+\justify
+можем да конструираме следната таблица, която обаче има една колона с две забранени места: 
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        A & M & I & R & A & * \\
+        \hline
+        C & * & L & E & I & S \\
+        \hline
+        A & G & E & * & S & T \\
+        \hline
+        U & R & E & * & W & H  \\
+        \hline
+        I & C & H & G & O & D \\
+        \hline
+        M & A & K & E & * & S \\
+        \hline
+        \end{tabular}
+\end{center}
+
+\section*{Задача 6}
+
+\end{document}
