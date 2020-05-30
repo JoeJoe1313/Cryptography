@@ -742,6 +742,70 @@ $1+x+x^2+x^3+x^4+x^5+x^6$
 
 \section*{Задача 8}
 
+\justify
+Искаме да докажем, че броят на откритите текстове $m$, които се шифрират в себе си, т.е. за които $m^e \equiv m \mod n$. Имаме още, че модулът е $n = pq$ и, че шифриращат експонента е $e$. Също така $p$ и $q$ са две големи прости числа с дължина поне 512 бита. Тъй като са прости числа, то $gcd(p,q) = 1$. Имаме още, че $m$ е цяло число. Тогава от китайската теорема за остатъците имаме, че системата 
+
+\begin{center}
+    $m^e \equiv m \mod p$ \\
+    $m^e \equiv m \mod q$
+\end{center}
+
+\justify
+винаги има решение и всеки две решения се различават с кратно на $n$.
+
+
+\justify
+Първо ще покажем, че $m^e \equiv m \mod p$ има $1 + gcd(e-1,\varphi(p))$ решения по $\mod p$.
+
+\justify
+Нека $p \mid m$ и
+\begin{center}
+    $m^e \equiv m \mod p$
+\end{center}
+\justify
+Тогава 
+\begin{center}
+    $m(m^{e-1}-1) \equiv 0 \mod p$
+\end{center} 
+\justify
+и също така 
+\begin{center}
+    $m^{e-1} \not\equiv 1 \mod p$,
+\end{center}
+\justify
+защото сме допуснали, че $p \mid m$ и значи $p \mid m^{e-1}$. От тук получаваме, че 
+\begin{center}
+    $m \equiv 0 \mod p$,
+\end{center}
+\justify
+което е еквивалентно на допускането $p \mid m$.
+
+\justify
+Нека сега $p \nmid m$. Tогава 
+\begin{center}
+    $m = g^t$,
+\end{center}
+\justify
+където $g$ е примитивен корен по модул $p$, тоест $g^{p-1} \equiv 1 \mod p$ и $g^k \not\equiv 1 \mod p$, $k < p-1$. Сега имаме, че 
+\begin{center}
+    $g^{te} \equiv g^t \mod p$
+\end{center}
+\justify
+или еквивалентно
+\begin{center}
+    $g^{t(e-1)} \equiv 1 \mod p$
+\end{center}
+\justify
+тогава и само тогава, когато 
+\begin{center}
+    $t(e-1) \equiv 0 \mod \varphi(p)$,
+\end{center}
+\justify
+защото $g$ е примитивен корен. Последното има $gcd(e-1,\varphi(p))$ = $gcd(e-1,p-1)$ решения. Добавяйки и тривиалното решение, получаваме, че $m^e \equiv m \mod p$ има обшо $1 + gdc(e-1,p-1)$ решения.
+
+\justify
+По аналогичен начин получаваме, че $m^e \equiv m \mod q$ има $1 + gcd(e-1,q-1)$ решения. От китайската теорема за остатъци следва, че системата, а от там и броят на отркитите текстове, които се шифрират в себе си, е $(1 + gcd(e-1,p-1))(1 + gcd(e-1,q-1))$.
+
 \section*{Задача 9}
 
 \end{document}
