@@ -7,6 +7,7 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{amssymb, graphics, setspace}
+\usepackage{multicol}
 
 \title{ЗАДАЧИ ПО КРИПТОГРАФИЯ}
 \author{Йоана Левчева\\ Приложна математика, 4 курс, ф.н. 31492}
@@ -208,7 +209,7 @@
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
         \hline
-        EB & QX & ZL & HD & LK & IV & QG & OM & AL & EB & VB & DO & SG & SF \\
+        EB & QX & ZL & HD & LK & IV & QG & OM & AL & EB & BV & DO & SG & SF \\
         \hline
         CR & \textcolor{red}{YP} & \textcolor{red}{TO} & GR & \textcolor{red}{AP} & \textcolor{red}{HY} & \textcolor{olive}{PL} & \textcolor{olive}{AY} & \textcolor{blue}{SA} & CR & \textcolor{blue}{UC} & IA & \textcolor{blue}{LR} & 0\textcolor{blue}{L} \\
         \hline
@@ -783,10 +784,10 @@ $1+x+x^2+x^3+x^4+x^5+x^6$
 \justify
 Нека сега $p \nmid m$. Tогава 
 \begin{center}
-    $m = g^t$,
+    $m \equiv g^t \mod p$,
 \end{center}
 \justify
-където $g$ е примитивен корен по модул $p$, тоест $g^{p-1} \equiv 1 \mod p$ и $g^k \not\equiv 1 \mod p$, $k < p-1$. Сега имаме, че 
+където $g$ е примитивен корен по модул $p$, тоест $g^{p-1} \equiv 1 \mod p$ и $g^k \not\equiv 1 \mod p$, $k < p-1$. Следователно можем да решаваме сравнението спрямо $t$. Сега имаме, че 
 \begin{center}
     $g^{te} \equiv g^t \mod p$
 \end{center}
@@ -807,5 +808,142 @@ $1+x+x^2+x^3+x^4+x^5+x^6$
 По аналогичен начин получаваме, че $m^e \equiv m \mod q$ има $1 + gcd(e-1,q-1)$ решения. От китайската теорема за остатъци следва, че системата, а от там и броят на отркитите текстове, които се шифрират в себе си, е $(1 + gcd(e-1,p-1))(1 + gcd(e-1,q-1))$.
 
 \section*{Задача 9}
+
+\justify
+Следният код на $Wolfram Mathematica$
+\begin{verbatim}
+    For[i = 1, i <= 101, i++,
+        value = Mod[2^i, 101];
+        If[value == 1, Print[i]];
+    ]
+\end{verbatim}
+с изход 
+\begin{verbatim}
+    100
+\end{verbatim}
+показва, че 2 генерира $Z_{101}^*$. По същия начин 
+\begin{verbatim}
+    For[i = 1, i <= 101, i++,
+        value = Mod[2^i, 101];
+        If[value == 66, Print[i]];
+    ]
+\end{verbatim}
+с изход 
+\begin{verbatim}
+    83
+\end{verbatim}
+получаваме, че отговърт е 83, но все пак ще приложим алгоритъма на $Pohlig-Hellman$.
+
+\justify
+В случая $q = 101$, $q-1 = 100 = 2^2.5^2$, $\alpha = 2$, $\alpha^{-1} = 51$. Търсим това $m$, за което 
+\begin{center}
+    $2^m = 66 \mod 101$.
+\end{center}
+Извъшваме пресмятанията
+\begin{center}
+    $\beta_1 = 2^{\frac{100}{2}} = 2^{50} = 100$ \\
+    $\beta_2 = 2^{\frac{100}{5}} = 2^{20} = 95$
+\end{center}
+
+\begin{center}
+$p_1 = 2$ 
+    \begin{tabular}{c|c c}
+        $i$ & 0 & 1 \\
+        \hline
+        $\beta_1^i$ & 1 & 100 \\
+    \end{tabular} \\
+$p_2 = 5$
+    \begin{tabular}{c|c c c c c}
+        $i$ & 0 & 1 & 2 & 3 & 4 \\
+        \hline
+        $\beta_1^i$ & 1 & 95 & 36 & 87 & 84 \\
+    \end{tabular} \\
+\end{center}
+Нека $2^m \equiv c \mod 101$, където $c = 66$. Тогава 
+\begin{center}
+\begin{tabular}{c c c c}
+ 
+ \shortstack{ \textcolor{white}{*} \\ $p_1 = 2, n_1 = 2$ \\ \textcolor{white}{*} } &
+ \shortstack{$c = 66,$ \\ $c_1 = c\alpha^{-1} = 33,$ \\ $\implies m^{(1)} = 1 + 1.2^1 = 3$} & 
+ \shortstack{$c^{\frac{100}{2}} = 100,$ \\ $c_1^{\frac{100}{2^2}} = 100$ \\ \textcolor{white}{*}} & 
+ \shortstack{$\implies b_0 = 1$ \\ $\implies b_1 = 1$ \\ \textcolor{white}{*}} \\ 
+
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{c c c c}
+ 
+ \shortstack{ \textcolor{white}{*} \\ $p_2 = 5, n_2 = 2$ \\ \textcolor{white}{*} } &
+ \shortstack{$c = 66,$ \\ $c_1 = c\alpha^{-3} = 84,$ \\ $\implies m^{(2)} = 3 + 1.5^1 = 8 $} & 
+ \shortstack{$c^{\frac{100}{5}} = 87,$ \\ $c_1^{\frac{100}{5^2}} = 95$ \\ \textcolor{white}{*}} & 
+ \shortstack{$\implies b_0 = 3$ \\ $\implies b_1 = 1$ \\ \textcolor{white}{*}} \\ 
+
+\end{tabular}
+\end{center}
+
+\justify
+Сега остава да пресметнем $m$.
+\begin{center}
+    $M_1 = \frac{100}{4} = 25$ и $y_1 \equiv M_1^{-1} \mod 4$, тоест $y_1 = 1$ \\
+    $M_2 = \frac{100}{25} = 4$ и $y_2 \equiv M_2^{-1} \mod 25$, тоест $y_2 = 19$
+\end{center}
+За $m$ получаваме 
+\begin{center}
+    $m = 3.25.1 + 8.4.19 = 683$,
+\end{center}
+за което имаме $2^{683} \equiv 2^{83} \equiv 66 \mod 101$. Следователно $\log_266 = 83$ в $Z^*_{101}$.
+
+\section*{Задача 13}
+
+\justify
+Следният код на $Wolfram$ $Mathematica$ 
+\begin{verbatim}
+    For[i = 1, i <= 353, i++,
+        value = Mod[3^i, 353];
+        If[value == 1, Print[i]];
+    ]
+\end{verbatim}
+с изход 
+\begin{verbatim}
+    352
+\end{verbatim}
+показва, че 3 генерира $Z^*_{353}$. По същия начин 
+\begin{verbatim}
+    For[i = 1, i <= 353, i++,
+        value = Mod[3^i, 353];
+        If[value == 135, Print[i]];
+    ]
+\end{verbatim}
+с изход 
+\begin{verbatim}
+    312
+\end{verbatim}
+получаваме, че отговорът е 312, но все пак ще приложим алгоритъма $Baby$ $step/giant$ $step$.
+
+\justify
+Този код 
+\begin{verbatim}
+    n = 352;
+    m = Ceiling[Sqrt[352]];
+    alfa = 3;
+    beta = 135;
+
+    gama = beta;
+    i = 1;
+    While[gama != 3, 
+        gama = Mod[gama*PowerMod[alfa, -m, 353], 353];
+        For[j = 0, j <= m, j++,
+            If[gama == Mod[alfa^j, 353], If[gama == 3, Print[i*m + j]]
+            ]
+        ];
+    i++
+    ]
+\end{verbatim}
+с изход 
+\begin{verbatim}
+    2072
+\end{verbatim}
+имплементира алгориътма и чрез него получаваме, че $x = 2072$, за което имаме $3^{2072} \equiv 3^{312} \equiv 135 \mod 353$. Следователно $\log_3135 = 312$ в $Z^*_{353}$.
 
 \end{document}
