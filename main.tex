@@ -1083,10 +1083,11 @@ $a = (2,3,7,13,27,53,106,213,425,851)$, модулът $m = 1529$ и $t = 64$.
 \begin{center}
     $y^3 - z^3 \equiv (y-z)(y^2 + yz + z^2) \mod n$.
 \end{center}
-Вероятността $gcd(y-z,n)$ да е нетривиален делител на $n = pq$ е 
+Вероятността $gcd(y-z,n)$ $\neq$ $\pm 1, \pm n$, е 
 \begin{center}
-    P($y \equiv z \mod p$, $y \not\equiv z \mod q$) + P($y \not\equiv z \mod p$, $y \equiv z \mod q$)
+    P($y \equiv z \mod p$, $y \not\equiv z \mod q$) + P($y \not\equiv z \mod p$, $y \equiv z \mod q$).
 \end{center}
+Когато $y \not\equiv z \mod p$ и $y \not\equiv z \mod q$, тогава и $y \not\equiv x \mod n$, но в този случай няма как да открием нетривиален делител.
 
 \end{document}
 
