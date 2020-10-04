@@ -28,7 +28,7 @@ for element in myArray {
     myCount = 0
     for box in element {
         if box == "*" {
-            xsmyCount += 1
+            myCount += 1
         }
     }
     if myCount == 0 || myCount == 1 {
